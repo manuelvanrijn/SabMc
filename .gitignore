@@ -14,3 +14,5 @@ Logs/
 *.BACKUP*
 *.hbm.xml
 *.cache
+App.config
+**/TvRenamer.exe.config
