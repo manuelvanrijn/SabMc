@@ -23,7 +23,8 @@ namespace SabMc.TvShow
 
 			if (args.Length >= 7)
 			{
-				SabNzbdJob job = new SabNzbdJob(args, MediaType.TvShow);
+				SabNzbdJob job = new SabNzbdJob(args);
+				job.Process(MediaType.TvShow);
 
 				if (job.Status == SabNzbdStatus.Ok)
 				{
@@ -38,7 +39,7 @@ namespace SabMc.TvShow
 			}
 			else
 			{
-				Console.WriteLine("ERROR: no parameters passed");
+				Console.WriteLine("ERROR: no or to few parameters passed");
 				Environment.Exit(1);
 			}
 

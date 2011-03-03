@@ -39,7 +39,10 @@ namespace SabMc.Services.Notifo
 					break;
 				default:
 					title = "Success";
-					message = string.Format("{0} was successfully renamed and moved to xbmc", job.FileName);
+					if(job.MediaType == MediaType.Other)
+						message = string.Format("{0} was successfully downloaded", job.FolderName);
+					else
+						message = string.Format("{0} was successfully renamed and moved to xbmc", job.FileName);
 					break;
 			}
 

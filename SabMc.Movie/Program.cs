@@ -32,7 +32,8 @@ namespace SabMc.Movie
 				                    		"0"
 				                    	};
 
-				SabNzbdJob job = new SabNzbdJob(testargs, MediaType.Movie);
+				SabNzbdJob job = new SabNzbdJob(testargs);
+				job.Process(MediaType.Movie);
 
 				if (job.Status == SabNzbdStatus.Ok)
 				{
@@ -48,7 +49,7 @@ namespace SabMc.Movie
 			}
 			else
 			{
-				Console.WriteLine("no parameters passed");
+				Console.WriteLine("ERROR: no or to few parameters passed");
 			}
 		}
 		private static void Process(SabNzbdJob job)

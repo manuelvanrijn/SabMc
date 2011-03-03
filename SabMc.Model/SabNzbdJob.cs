@@ -7,13 +7,12 @@ namespace SabMc.Model
 	public class SabNzbdJob
 	{
 		private readonly DirectoryInfo directory;
-		private readonly FileInfo fileInfo;
-		private MediaType mediaType;
+		private FileInfo fileInfo;
+		private MediaType mediaType = MediaType.Other;
 		private SabNzbdStatus status;
 
-		public SabNzbdJob(string[] args, MediaType type)
+		public SabNzbdJob(string[] args)
 		{
-			mediaType = type;
 			// Set Directory and File
 			string path = args[0];
 			directory = new DirectoryInfo(path);
@@ -21,7 +20,11 @@ namespace SabMc.Model
 			// Check Status
 			status = GetStatusFromArgs(args);
 			Console.WriteLine(string.Format("== Initial SabNzbd status code: {0} ==", status));
-			if(status != SabNzbdStatus.Ok)
+		}
+		public void Process(MediaType type)
+		{
+			mediaType = type;
+			if (status != SabNzbdStatus.Ok)
 				return;
 
 			if (directory.Exists)

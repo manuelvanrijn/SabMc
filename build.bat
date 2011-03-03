@@ -25,6 +25,11 @@ cd SabMc.Movie\bin\Debug
 cp -R -v -f * ../../../release/sabmc_%BuildTimeStamp%
 cd ../../../
 
+echo SabMc.Notifo
+cd SabMc.Notifo\bin\Debug
+cp -R -v -f * ../../../release/sabmc_%BuildTimeStamp%
+cd ../../../
+
 echo Cleanup
 cd release\sabmc_%BuildTimeStamp%
 del /Q *.pdb
