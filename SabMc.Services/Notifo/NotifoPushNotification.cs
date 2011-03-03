@@ -1,6 +1,7 @@
 namespace SabMc.Services.Notifo
 {
-	using System.Configuration;
+	using System;
+	using Config;
 	using Model;
 	using Model.Enums;
 
@@ -8,13 +9,18 @@ namespace SabMc.Services.Notifo
 	{
 		private static string _username;
 		private static string _secret;
+		private static bool _enabled;
 
 		public static void Send(SabNzbdJob job)
 		{
-			string title;
-			string message;
+			string title, message, label;
 
 			Setup();
+			// Cancel
+			if (_enabled == false)
+				return;
+
+			Console.WriteLine("== Sending Notifo message ==");
 			NotifoApi service = new NotifoApi(_username, _secret);
 			
 			switch (job.Status)
@@ -36,14 +42,24 @@ namespace SabMc.Services.Notifo
 					message = string.Format("{0} was successfully renamed and moved to xbmc", job.FileName);
 					break;
 			}
-			
-			service.Send(_username, "Sabnzbd", title, message);
+
+			label = "SabMc";
+			if (job.MediaType == MediaType.TvShow)
+				label = "SabMc.TvShow";
+			if (job.MediaType == MediaType.Movie)
+				label = "SabMc.Movie";
+
+			Console.WriteLine(string.Format("title: {0}", title));
+			Console.WriteLine(string.Format("message: {0}", message));
+
+			service.Send(_username, label, title, message);
 		}
 
 		private static void Setup()
 		{
-			_secret = ConfigurationManager.AppSettings["notifo_api_key"];
-			_username = ConfigurationManager.AppSettings["notifo_usename"];
+			_secret = ConfigReader.Config.NotifoApiKey;
+			_username = ConfigReader.Config.NotifoUsename;
+			_enabled = ConfigReader.Config.NotifoEnabled;
 		}
 	}
 }

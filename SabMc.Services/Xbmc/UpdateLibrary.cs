@@ -1,19 +1,26 @@
 namespace SabMc.Services.Xbmc
 {
 	using System;
-	using System.Configuration;
 	using System.Net;
+	using Config;
 
 	public static class UpdateLibrary
 	{
 		private static string _username;
 		private static string _password;
 		private static string _hostname;
-		private static string _portnumber;
+		private static int _portnumber;
+		private static bool _enabled;
 
 		public static bool UpdateVideoLibrary()
 		{
 			Setup();
+			// Cancel if not enabled
+			if (_enabled == false)
+				return true;
+
+			Console.WriteLine("== Sending XBMC update video library signal ==");
+
 			try
 			{
 				string url = string.Format("http://{0}:{1}/xbmcCmds/xbmcHttp?command=ExecBuiltIn&parameter=XBMC.updatelibrary(video)", _hostname, _portnumber);
@@ -26,17 +33,19 @@ namespace SabMc.Services.Xbmc
 
 				return true;
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				return false;
 			}
+
 		}
 		private static void Setup()
 		{
-			_username = ConfigurationManager.AppSettings["xbmc_username"];
-			_password = ConfigurationManager.AppSettings["xbmc_password"];
-			_hostname = ConfigurationManager.AppSettings["xbmc_hostname"];
-			_portnumber = ConfigurationManager.AppSettings["xbmc_potnumber"];
+			_username = ConfigReader.Config.XbmcUsername;
+			_password = ConfigReader.Config.XbmcPassword;
+			_hostname = ConfigReader.Config.XbmcHostname;
+			_portnumber = ConfigReader.Config.XbmcPortnumber;
+			_enabled = ConfigReader.Config.XbmcUpdateOnFinish;
 		}
 	}
 }

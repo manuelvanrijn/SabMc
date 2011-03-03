@@ -55,9 +55,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\App.config">
-      <Link>App.config</Link>
-    </None>
     <None Include="Libs\TvRenamer\TvRenamer.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,5 +1,6 @@
 namespace SabMc.Model
 {
+	using System;
 	using System.IO;
 	using Enums;
 
@@ -7,15 +8,22 @@ namespace SabMc.Model
 	{
 		private readonly DirectoryInfo directory;
 		private readonly FileInfo fileInfo;
+		private MediaType mediaType;
 		private SabNzbdStatus status;
 
 		public SabNzbdJob(string[] args, MediaType type)
 		{
-			status = GetStatusFromArgs(args);
-			
+			mediaType = type;
 			// Set Directory and File
 			string path = args[0];
 			directory = new DirectoryInfo(path);
+			
+			// Check Status
+			status = GetStatusFromArgs(args);
+			Console.WriteLine(string.Format("== Initial SabNzbd status code: {0} ==", status));
+			if(status != SabNzbdStatus.Ok)
+				return;
+
 			if (directory.Exists)
 			{
 				switch (type)
@@ -43,6 +51,7 @@ namespace SabMc.Model
 			{
 				status = SabNzbdStatus.FailedUnpacking;
 			}
+			Console.WriteLine(string.Format("== After process status code: {0} ==", status));
 		}
 		private static SabNzbdStatus GetStatusFromArgs(string[] args)
 		{
@@ -91,6 +100,10 @@ namespace SabMc.Model
 		public string FileName
 		{
 			get { return fileInfo.Name; }
+		}
+		public MediaType MediaType
+		{
+			get { return mediaType; }
 		}
 	}
 }

@@ -33,6 +33,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigData.cs" />
     <Compile Include="Enums\MediaType.cs" />
     <Compile Include="Enums\SabNzbdStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

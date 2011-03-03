@@ -5,6 +5,7 @@ namespace SabMc.TvShow
 	using System.IO;
 	using Model;
 	using Model.Enums;
+	using Services.Config;
 	using Services.Notifo;
 	using Services.Xbmc;
 
@@ -12,18 +13,36 @@ namespace SabMc.TvShow
 	{
 		static void Main(string[] args)
 		{
-			SabNzbdJob job = new SabNzbdJob(args, MediaType.TvShow);
-
-			if (job.Status == SabNzbdStatus.Ok)
+			if(ConfigReader.CheckConfig() == false)
 			{
-				Process(job);
-				
-				// send xbmc update library signal
-				UpdateLibrary.UpdateVideoLibrary();
+				Console.WriteLine("INFO: Config file created, please fill it :)");
+				Environment.Exit(1);
 			}
 
-			// send notifio notification
-			NotifoPushNotification.Send(job);
+			Console.WriteLine("== STARTING SABMC.TVSHOW PROCESS ==");
+
+			if (args.Length >= 7)
+			{
+				SabNzbdJob job = new SabNzbdJob(args, MediaType.TvShow);
+
+				if (job.Status == SabNzbdStatus.Ok)
+				{
+					Process(job);
+
+					// send xbmc update library signal
+					UpdateLibrary.UpdateVideoLibrary();
+				}
+
+				// send notifio notification
+				NotifoPushNotification.Send(job);
+			}
+			else
+			{
+				Console.WriteLine("ERROR: no parameters passed");
+				Environment.Exit(1);
+			}
+
+			Console.WriteLine("== FINISHED SABMC.TVSHOW PROCESS ==");
 		}
 		private static void Process(SabNzbdJob job)
 		{
@@ -53,7 +72,7 @@ namespace SabMc.TvShow
 					}
 					else
 					{
-						throw new Exception("can't find tvrenamer.exe ?");
+						throw new Exception("ERROR: can't find tvrenamer.exe ?");
 					}
 				}
 			}

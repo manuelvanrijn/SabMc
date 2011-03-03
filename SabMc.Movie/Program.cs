@@ -1,8 +1,10 @@
 namespace SabMc.Movie
 {
+	using System;
 	using System.Configuration;
 	using Model;
 	using Model.Enums;
+	using Services.Config;
 	using Services.Notifo;
 	using Services.Xbmc;
 	using TheMovieDB;
@@ -11,35 +13,48 @@ namespace SabMc.Movie
 	{
 		static void Main(string[] args)
 		{
-
-			string[] testargs = new string[]
-			                    	{
-			                    		"C:\\MEUK\\TV Shows\\Wanted (2008) By theknife Xvid nlsubs",
-			                    		"Wanted (2008) By theknife Xvid nlsubs.nzb",
-			                    		"Wanted (2008) By theknife Xvid nlsubs",
-			                    		"None",
-			                    		"alt.binaries.multimedia",
-			                    		"0",
-			                    		"0"
-			                    	};
-
-			SabNzbdJob job = new SabNzbdJob(testargs, MediaType.Movie);
-
-			if (job.Status == SabNzbdStatus.Ok)
+			if(ConfigReader.CheckConfig() == false)
 			{
-				Process(job);
-
-				// send xbmc update library signal
-				//UpdateLibrary.UpdateVideoLibrary();
+				Console.WriteLine("Config file created, please fill it :)");
+				Environment.Exit(1);
 			}
 
-			// send notifio notification
-			//NotifoPushNotification.Send(job);
-			System.Console.ReadLine();
+			if (args.Length >= 7)
+			{
+				string[] testargs = new string[]
+				                    	{
+				                    		"C:\\MEUK\\TV Shows\\Wanted (2008) By theknife Xvid nlsubs",
+				                    		"Wanted (2008) By theknife Xvid nlsubs.nzb",
+				                    		"Wanted (2008) By theknife Xvid nlsubs",
+				                    		"None",
+				                    		"alt.binaries.multimedia",
+				                    		"0",
+				                    		"0"
+				                    	};
+
+				SabNzbdJob job = new SabNzbdJob(testargs, MediaType.Movie);
+
+				if (job.Status == SabNzbdStatus.Ok)
+				{
+					Process(job);
+
+					// send xbmc update library signal
+					//UpdateLibrary.UpdateVideoLibrary();
+				}
+
+				// send notifio notification
+				//NotifoPushNotification.Send(job);
+				Console.ReadLine();
+			}
+			else
+			{
+				Console.WriteLine("no parameters passed");
+			}
 		}
 		private static void Process(SabNzbdJob job)
 		{
-			string apiKey = ConfigurationManager.AppSettings["themoviedb_api_key"];
+			string apiKey = ConfigReader.Config.TmdbApiKey;
+
 			TmdbAPI theMovieDbApi = new TmdbAPI(apiKey);
 			TmdbMovie[] results = theMovieDbApi.MovieSearch(job.FolderName);
 			System.Console.WriteLine(string.Format("results found: {0}", results.Length));

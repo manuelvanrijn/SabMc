@@ -5,6 +5,7 @@ _ReSharper*
 *.suo
 **/bin/
 **/Bin/
+release/
 obj/
 Logs/
 *.bak
