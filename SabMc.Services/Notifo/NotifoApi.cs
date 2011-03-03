@@ -11,11 +11,11 @@ namespace SabMc.Services.Notifo
 		private readonly string apiUsername;
 		private readonly string apiSecret;
 
-		private string to;
-		private string message;
-		private string title;
-		private string label;
-		private string link;
+		private string to = string.Empty;
+		private string message = string.Empty;
+		private string title = string.Empty;
+		private string label = string.Empty;
+		private string link = string.Empty;
 
 		public NotifoApi(string apiUsername, string apiSecret)
 		{
@@ -25,7 +25,7 @@ namespace SabMc.Services.Notifo
 
 		public bool Send(string to, string label, string title, string message)
 		{
-			return this.Send(to, label, title, message, "");
+			return Send(to, label, title, message, "");
 		}
 		public bool Send(string to, string label, string title, string message, string link)
 		{

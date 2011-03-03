@@ -10,7 +10,6 @@ namespace SabMc.TvShow
 
 	class Program
 	{
-		// "C:\MEUK\TV Shows\castle.317.720p-dimension.sample.mkv" castle.317.720p-dimension.sample.mkv.nzb castle.317.720p-dimension.sample.mkv "tv shows" alt.binaries.multimedia   0
 		static void Main(string[] args)
 		{
 			SabNzbdJob job = new SabNzbdJob(args, MediaType.TvShow);

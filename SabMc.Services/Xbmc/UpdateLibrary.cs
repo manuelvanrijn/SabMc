@@ -20,7 +20,7 @@ namespace SabMc.Services.Xbmc
 				CredentialCache credentialCache = new CredentialCache();
 				credentialCache.Add(new Uri(url), "BASIC", new NetworkCredential(_username, _password));
 
-				WebRequest request = HttpWebRequest.Create(url);
+				WebRequest request = WebRequest.Create(url);
 				request.Credentials = credentialCache;
 				request.GetResponse();
 

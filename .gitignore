@@ -2,8 +2,8 @@ _ReSharper*
 *resharper*
 *.user
 *.suo
-**/*/bin/
-**/*/Bin/
+**/bin/
+**/Bin/
 obj/
 Logs/
 *.bak

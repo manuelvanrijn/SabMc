@@ -37,8 +37,7 @@ namespace SabMc.Services.Notifo
 					break;
 			}
 			
-			System.Console.WriteLine(string.Format("Title: {0}. Message: {1}", title, message));
-			//service.Send(_username, "Sabnzbd", title, message);
+			service.Send(_username, "Sabnzbd", title, message);
 		}
 
 		private static void Setup()
