@@ -1,7 +1,7 @@
 #SabNzbd XBMC processing
 ##What?
 
-Two simple scripts for processing TV Shows and Movies after SabNzbd finished downloading. 
+Two simple scripts for processing TV Shows and Movies after SabNzbd finished downloading and a simple Notifo script.
 
 ##How?
 
