@@ -17,17 +17,17 @@ mkdir release\sabmc_%BuildTimeStamp%
 
 echo SabMc.TvShow
 cd SabMc.TvShow\bin\Debug
-cp -R -v -f * ../../../release/sabmc_%BuildTimeStamp%
+xcopy /Y /E * ..\..\..\release\sabmc_%BuildTimeStamp%
 cd ../../../
 
 echo SabMc.Movie
 cd SabMc.Movie\bin\Debug
-cp -R -v -f * ../../../release/sabmc_%BuildTimeStamp%
+xcopy /Y /E * ..\..\..\release\sabmc_%BuildTimeStamp%
 cd ../../../
 
 echo SabMc.Notifo
 cd SabMc.Notifo\bin\Debug
-cp -R -v -f * ../../../release/sabmc_%BuildTimeStamp%
+xcopy /Y /E * ..\..\..\release\sabmc_%BuildTimeStamp%
 cd ../../../
 
 echo Cleanup
