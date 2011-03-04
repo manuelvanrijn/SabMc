@@ -24,7 +24,7 @@ namespace SabMc.Movie
 			//{
 			string[] testargs = new string[]
 				                    	{
-				                    		"C:\\MEUK\\TV Shows\\The Next Three Days (2010) 720P.X264.NL.SUBBED",
+				                    		"C:\\MEUK\\TV Shows\\The Next Three Days 720P.X264.NL.SUBBED",
 				                    		"Wanted (2008) By theknife Xvid nlsubs.nzb",
 				                    		"Wanted (2008) By theknife Xvid nlsubs",
 				                    		"None",
@@ -59,13 +59,18 @@ namespace SabMc.Movie
 
 			TmdbAPI theMovieDbApi = new TmdbAPI(apiKey);
 			Console.WriteLine(job.FolderName);
-			Console.WriteLine(CleanUp(job.FolderName));
-			TmdbMovie[] results = theMovieDbApi.MovieSearch(job.FolderName);
+			
+			string cleanName = CleanUp(job.FolderName);
+			Console.WriteLine(cleanName);
+			TmdbMovie[] results = theMovieDbApi.MovieSearch(cleanName);
 
 			Console.WriteLine(string.Format("results found: {0}", results.Length));
 			foreach (TmdbMovie movie in results)
 			{
-				Console.WriteLine(string.Format("movie: {0}", movie.Name));
+				if(movie.Released.HasValue)
+					Console.WriteLine(string.Format("movie: {0} ({1})", movie.Name, movie.Released.Value.Year));
+				else
+					Console.WriteLine(string.Format("movie: {0}", movie.Name));
 			}
 		}
 
@@ -85,9 +90,41 @@ namespace SabMc.Movie
 			return movieName;
 		}
 
+		private static string GetMovieNameBySplittingParts(string movie)
+		{
+			string originalName = movie;
+
+			movie = movie.ToLower().Replace(" vob", "_");
+            movie = movie.Replace(" cam", "_");
+            movie = movie.Replace(" dvdrip", "_");
+            movie = movie.Replace(" dvdscr", "_");
+            movie = movie.Replace(" dvd", "_");
+            movie = movie.Replace(" r5", "_");
+            movie = movie.Replace(" ts", "_");
+            movie = movie.Replace(" kvcd", "_");
+            movie = movie.Replace(" xvid", "_");
+            movie = movie.Replace(" divx", "_");
+            movie = movie.Replace(" x264", "_");
+            movie = movie.Replace(" 720p", "_");
+            movie = movie.Replace(" ts", "_");
+            movie = movie.Replace(" ws", "_");
+            movie = movie.Replace(" proper", "_");
+            movie = movie.Replace(" bluray", "_");
+            movie = movie.Replace(" hd-dvd", "_");
+            movie = movie.Replace(" hd-screener", "_");
+			movie = movie.Replace(" sub", "_");
+			
+			int left = movie.Split('_')[0].Trim().Length;
+			return originalName.Substring(0, left);
+		}
+
 		private static string CleanUp(string name)
 		{
+			name = name.Replace('.', ' ');
+			
 			name = GetMovieNameForYearMatch(name);
+			name = GetMovieNameBySplittingParts(name);
+
 			return name;
 		}
 	}
