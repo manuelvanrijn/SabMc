@@ -1,5 +1,6 @@
 namespace SabMc.Services.Config
 {
+	using System;
 	using System.IO;
 	using System.Xml.Serialization;
 	using Model;
@@ -7,7 +8,6 @@ namespace SabMc.Services.Config
 	public class ConfigReader
 	{
 		private static ConfigData _config = null;
-		public static string ConfigFilename = "config.xml";
 
 		public static ConfigData Config
 		{
@@ -21,9 +21,9 @@ namespace SabMc.Services.Config
 
 		private static ConfigData GetConfigData()
 		{
-			if (!File.Exists(ConfigFilename))
+			if (!File.Exists(ConfigFilePath))
 			{
-				using (FileStream fs = new FileStream(ConfigFilename, FileMode.Create))
+				using (FileStream fs = new FileStream(ConfigFilePath, FileMode.Create))
 				{
 					XmlSerializer xs = new XmlSerializer(typeof(ConfigData));
 					ConfigData sxml = new ConfigData();
@@ -32,7 +32,7 @@ namespace SabMc.Services.Config
 				}
 			}
 			{
-				using (FileStream fs = new FileStream(ConfigFilename, FileMode.Open))
+				using (FileStream fs = new FileStream(ConfigFilePath, FileMode.Open))
 				{
 					XmlSerializer xs = new XmlSerializer(typeof(ConfigData));
 					ConfigData sc = (ConfigData)xs.Deserialize(fs);
@@ -42,9 +42,9 @@ namespace SabMc.Services.Config
 		}
 		public static bool CheckConfig()
 		{
-			if (!File.Exists(ConfigFilename))
+			if (!File.Exists(ConfigFilePath))
 			{
-				using (FileStream fs = new FileStream(ConfigFilename, FileMode.Create))
+				using (FileStream fs = new FileStream(ConfigFilePath, FileMode.Create))
 				{
 					XmlSerializer xs = new XmlSerializer(typeof(ConfigData));
 					ConfigData sxml = new ConfigData();
@@ -56,13 +56,22 @@ namespace SabMc.Services.Config
 		}
 		public static bool SaveConfigData(ConfigData config)
 		{
-			if (!File.Exists(ConfigFilename)) return false; // don't do anything if file doesn't exist
+			if (!File.Exists(ConfigFilePath)) return false; // don't do anything if file doesn't exist
 
-			using (FileStream fs = new FileStream(ConfigFilename, FileMode.Open))
+			using (FileStream fs = new FileStream(ConfigFilePath, FileMode.Open))
 			{
 				XmlSerializer xs = new XmlSerializer(typeof(ConfigData));
 				xs.Serialize(fs, config);
 				return true;
+			}
+		}
+
+		public static string ConfigFilePath
+		{
+			get
+			{
+				string appPath = AppDomain.CurrentDomain.BaseDirectory;
+				return Path.Combine(appPath, "config.xml");
 			}
 		}
 	}
