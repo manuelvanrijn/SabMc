@@ -13,8 +13,53 @@ namespace SabMc.Services.Notifo
 
 		public static void Send(SabNzbdJob job)
 		{
-			string title, message, label;
+			switch (job.Status)
+			{
+				case SabNzbdStatus.FailedUnpacking:
+				case SabNzbdStatus.FailedTvRenamer:
+				case SabNzbdStatus.FailedVerification:
+					Send(job, job.FolderName);
+					break;
+				default:
+					if (job.MediaType == MediaType.Other)
+						Send(job, job.FolderName);
+					else
+						Send(job, job.FileName);
+					break;
+			}
+		}
+		public static void Send(SabNzbdJob job, string jobName)
+		{
+			string title, message;
 
+			switch (job.Status)
+			{
+				case SabNzbdStatus.FailedUnpacking:
+					title = "Unpack error";
+					message = string.Format("Unable to unpack {0}", jobName);
+					break;
+				case SabNzbdStatus.FailedTvRenamer:
+					title = "Rename error";
+					message = string.Format("Failed to rename and move the TV show {0}", jobName);
+					break;
+				case SabNzbdStatus.FailedVerification:
+					title = "Verification error";
+					message = string.Format("Verification error occured on {0}", jobName);
+					break;
+				default:
+					title = "Success";
+					if(job.MediaType == MediaType.Other)
+						message = string.Format("{0} was successfully downloaded", jobName);
+					else
+						message = string.Format("{0} was successfully renamed and moved to xbmc", jobName);
+					break;
+			}
+
+			Send(job.MediaType, title, message);
+		}
+		
+		public static void Send(MediaType mediaType, string title, string message)
+		{
 			Setup();
 			// Cancel
 			if (_enabled == false)
@@ -23,33 +68,10 @@ namespace SabMc.Services.Notifo
 			Console.WriteLine("== Sending Notifo message ==");
 			NotifoApi service = new NotifoApi(_username, _secret);
 			
-			switch (job.Status)
-			{
-				case SabNzbdStatus.FailedUnpacking:
-					title = "Unpack error";
-					message = string.Format("Unable to unpack {0}", job.FolderName);
-					break;
-				case SabNzbdStatus.FailedTvRenamer:
-					title = "Rename error";
-					message = string.Format("Failed to rename and move the TV show {0}", job.FolderName);
-					break;
-				case SabNzbdStatus.FailedVerification:
-					title = "Verification error";
-					message = string.Format("Verification error occured on {0}", job.FolderName);
-					break;
-				default:
-					title = "Success";
-					if(job.MediaType == MediaType.Other)
-						message = string.Format("{0} was successfully downloaded", job.FolderName);
-					else
-						message = string.Format("{0} was successfully renamed and moved to xbmc", job.FileName);
-					break;
-			}
-
-			label = "SabMc";
-			if (job.MediaType == MediaType.TvShow)
+			string label = "SabMc";
+			if (mediaType == MediaType.TvShow)
 				label = "SabMc.TvShow";
-			if (job.MediaType == MediaType.Movie)
+			if (mediaType == MediaType.Movie)
 				label = "SabMc.Movie";
 
 			Console.WriteLine(string.Format("title: {0}", title));
@@ -57,7 +79,6 @@ namespace SabMc.Services.Notifo
 
 			service.Send(_username, label, title, message);
 		}
-
 		private static void Setup()
 		{
 			_secret = ConfigReader.Config.NotifoApiKey;

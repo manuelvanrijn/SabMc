@@ -13,9 +13,9 @@ namespace SabMc.Model
 		private string xbmcPassword = string.Empty;
 		private string xbmcHostname = string.Empty;
 		private int xbmcPortnumber = 8080;
-
-		// TheMovieDB
-		private string tmdbApiKey = string.Empty;
+		
+        // MOVIE PATH
+		private string movieFolder = string.Empty;
 
 		public ConfigData()
 		{
@@ -28,7 +28,7 @@ namespace SabMc.Model
 			xbmcUsername = "your_xbmc_username";
 			xbmcPassword = "your_xbmc_password";
 
-			tmdbApiKey = "your_api_key";
+			movieFolder = @"C:\data\movie_folder";
 		}
 
 		#region Properties Notifo
@@ -84,12 +84,12 @@ namespace SabMc.Model
 
 		#endregion
 
-		#region Properties The Movie DB
+		#region Properties Movie Path
 
-		public string TmdbApiKey
+		public string MovieFolder
 		{
-			get { return tmdbApiKey; }
-			set { tmdbApiKey = value; }
+			get { return movieFolder; }
+			set { movieFolder = value; }
 		}
 
 		#endregion

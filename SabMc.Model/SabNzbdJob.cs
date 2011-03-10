@@ -7,7 +7,7 @@ namespace SabMc.Model
 	public class SabNzbdJob
 	{
 		private readonly DirectoryInfo directory;
-		private FileInfo fileInfo;
+		private FileInfo fileInfo = null;
 		private MediaType mediaType = MediaType.Other;
 		private SabNzbdStatus status;
 
@@ -33,16 +33,28 @@ namespace SabMc.Model
 				{
 					case MediaType.TvShow:
 						// find the largest file in the target folder
-						FileInfo[] fileList = directory.GetFiles("*.*", SearchOption.AllDirectories);	// recursive
-						foreach (FileInfo file in fileList)
-						{
-							if (GetFileLength(file) > GetFileLength(fileInfo))
-								fileInfo = file;
-						}
+						HandleGetLargestFile(true);
 						status = SabNzbdStatus.Ok;
 						break;
 					case MediaType.Movie:
+						DirectoryInfo[] directoryList = directory.GetDirectories("VIDEO_TS", SearchOption.AllDirectories);
+						if (directoryList.Length == 1)
+						{
+							// DVD
 
+						}
+						else
+						{
+							// handle largest file
+							HandleGetLargestFile(false);
+							// larger than 300 mb ?
+//							if (GetFileLength(fileInfo) < (1024 * 1024 * 300))
+//							{
+//								// weird movie if it's smaller than 300 mb and hasn't got a VIDEO_TS folder?
+//								status = SabNzbdStatus.FailedVerification;
+//								return;
+//							}
+						}
 						status = SabNzbdStatus.Ok;
 						break;
 					default:
@@ -56,6 +68,34 @@ namespace SabMc.Model
 			}
 			Console.WriteLine(string.Format("== After process status code: {0} ==", status));
 		}
+
+		public void MoveMovie(DirectoryInfo di)
+		{
+			fileInfo.CopyTo(Path.Combine(di.FullName, fileInfo.Name));
+		}
+
+		private void HandleGetLargestFile(bool delete)
+		{
+			FileInfo[] fileList = directory.GetFiles("*.*", SearchOption.AllDirectories);	// recursive
+			foreach (FileInfo file in fileList)
+			{
+				if (GetFileLength(file) > GetFileLength(fileInfo))
+				{
+					// delete smaller fileInfo
+					if (fileInfo != null && delete)
+						fileInfo.Delete();
+
+					fileInfo = file;
+				}
+				else
+				{
+					// smaller, so delete
+					if(delete)
+						file.Delete();
+				}
+			}
+		}
+
 		private static SabNzbdStatus GetStatusFromArgs(string[] args)
 		{
 			int lastIndex = args.Length - 1;
