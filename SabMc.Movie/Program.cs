@@ -2,8 +2,6 @@ namespace SabMc.Movie
 {
 	using System;
 	using System.IO;
-	using System.Text.RegularExpressions;
-	using Imdb;
 	using Model;
 	using Model.Enums;
 	using Services.Config;
@@ -12,166 +10,99 @@ namespace SabMc.Movie
 
 	class Program
 	{
-		private static string queryString = string.Empty;
-		private static string _movieFolder = string.Empty;
-		private static SabNzbdJob job;
-		private static bool imdbStarted = false;
+		private static bool _error;
 
 		static void Main(string[] args)
 		{
 			if (ConfigReader.CheckConfig() == false)
 			{
-				Console.WriteLine("Config file created, please fill it :)");
+				Console.WriteLine("INFO: Config file created, please fill it :)");
 				Environment.Exit(1);
 			}
-			Setup();
 
+			Console.WriteLine("== STARTING SABMC.MOVIE PROCESS ==");
+			_error = false;
+			
 			if (args.Length >= 7)
 			{
-				/*string[] testargs = new string[]
-											{
-												"C:\\MEUK\\TV Shows\\The.Next.Three.Days.720P.X264.NL.SUBBED",
-												"Wanted (2008) By theknife Xvid nlsubs.nzb",
-												"Wanted (2008) By theknife Xvid nlsubs",
-												"None",
-												"alt.binaries.multimedia",
-												"0",
-												"0"
-											};*/
-
-				job = new SabNzbdJob(args);
+				SabNzbdJob job = new SabNzbdJob(args);
 				job.Process(MediaType.Movie);
 
 				if (job.Status == SabNzbdStatus.Ok)
-					Process();
-				else
+				{
+					Process(job);
+					// send xbmc update library signal
+					UpdateLibrary.UpdateVideoLibrary();
+					// remove old files
+					job.CleanUp();
+				}
+				if (_error == false)
+				{
+					// send notifio notification
 					NotifoPushNotification.Send(job);
+				}
 			}
 			else
 			{
 				Console.WriteLine("ERROR: no or to few parameters passed");
+				Environment.Exit(1);
 			}
-		}
-		private static void Process()
-		{
-			Console.WriteLine(job.FolderName);
-			queryString = CleanUp(job.FolderName);
-			Console.WriteLine(queryString);
 
-			Services imdbService = new Services();
-			imdbService.FindMovie(queryString);
-			imdbService.FoundMovies += new Services.FoundMoviesEventHandler(ImdbServiceFoundMovies);
-			// wait for it!
-			Console.ReadLine();
+			Console.WriteLine("== FINISHED SABMC.MOVIE PROCESS ==");
+			if(_error)
+				Environment.Exit(1);
 		}
 
-		static void ImdbServiceFoundMovies(MoviesResultset resultset)
+		private static void Process(SabNzbdJob job)
 		{
-			if (imdbStarted)
+			/*
+			 * 1. find the name by the clean name of the folder
+			 * 2. findout what the structure is of the folder and what to copy
+			 * 3. create folder
+			 * 4. move the job
+			 */
+
+			/* 1 */
+			string cleanName = VideoHelper.GetCleanName(job.FolderName);
+			Console.WriteLine(string.Format("INFO: Clean name: {0}", cleanName));
+
+			/* 2 */
+			ImdbHelper.GetMovie(cleanName);
+			if (ImdbHelper.HasError)
+			{
+				Console.WriteLine(string.Format("ERROR: IMDB error: {0}", ImdbHelper.ErrorMessage));
+				NotifoPushNotification.Send(MediaType.Movie, "IMDB Error", ImdbHelper.ErrorMessage);
+				_error = true;
 				return;
-
-			imdbStarted = true;
-			if (resultset.Error)
-			{
-				Console.WriteLine(string.Format("Error: {0}", resultset.ErrorMessage));
-				NotifoPushNotification.Send(MediaType.Movie, "IMDB error", string.Format("Error: {0}", resultset.ErrorMessage));
-				Environment.Exit(1);
-			}
-			if (resultset.ExactMatches != null && resultset.ExactMatches.Count == 0)
-			{
-				Console.WriteLine(string.Format("Found no matches for the querystring: {0}", queryString));
-				NotifoPushNotification.Send(MediaType.Movie, "IMDB error", string.Format("Found no matches for the querystring: {0}", queryString));
-				Environment.Exit(1);
-			}
-			if (resultset.ExactMatches != null && resultset.ExactMatches.Count > 1)
-			{
-				Console.WriteLine(string.Format("Found more than one match ({1} matches) for the querystring: {0}", queryString,
-												resultset.ExactMatches.Count));
-				NotifoPushNotification.Send(MediaType.Movie, "IMDB error", string.Format("Found more than one match ({1} matches) for the querystring: {0}", queryString, resultset.ExactMatches.Count));
-				Environment.Exit(1);
 			}
 
-			if (resultset.ExactMatches != null && resultset.ExactMatches.Count == 1)
+			/* 3 */
+			string movieRootFolder = ConfigReader.Config.MovieFolder;
+			DirectoryInfo movieDirectory = new DirectoryInfo(Path.Combine(movieRootFolder, ImdbHelper.Movie.Title));
+			if(movieDirectory.Exists)
 			{
-				Movie movie = resultset.ExactMatches[0];
-				Console.WriteLine(string.Format("Success: {0}", movie.Title));
-				DirectoryInfo di = new DirectoryInfo(Path.Combine(_movieFolder, movie.Title));
-				if (di.Exists == false)
-				{
-					di.Create();
-					job.MoveMovie(di);
-					NotifoPushNotification.Send(job);
-					UpdateLibrary.UpdateVideoLibrary();
-					Environment.Exit(0);
-				}
-				else
-				{
-					NotifoPushNotification.Send(MediaType.Movie, "Move error", string.Format("Folder: '{0}' already excists", di.FullName));
-					Environment.Exit(1);
-				}
+				// Folder already present in the movieRootFolder
+				NotifoPushNotification.Send(MediaType.Movie, "Movie Error", string.Format("Movie folder: '{0}' already excists", movieDirectory.FullName));
+				_error = true;
+				return;
 			}
-
-			// ehhh ?
-			NotifoPushNotification.Send(MediaType.Movie, "Error", "weird error with the imdb searcher.");
-			Environment.Exit(1);
-		}
-
-		private static string GetMovieNameForYearMatch(string movie)
-		{
-			string movieName = movie;
-			const string patternYear = @"(?<Year>\d{4})";
-
-			Match titleMatchYear = Regex.Match(movie, patternYear);
-			if (titleMatchYear.Success)
+			try
 			{
-				int year = 0;
-				Int32.TryParse(titleMatchYear.Groups["Year"].Value, out year);
-				string[] titleSplit = Regex.Split(movie, patternYear);
-				movieName = titleSplit[0].TrimEnd(' ', '(', '.').Replace('.', ' ') + " (" + year + ")";
+				movieDirectory.Create();
 			}
-			return movieName;
-		}
-
-		private static string GetMovieNameBySplittingParts(string movie)
-		{
-			string originalName = movie;
-
-			movie = movie.ToLower().Replace(" vob", "_");
-			movie = movie.Replace(" cam", "_");
-			movie = movie.Replace(" dvdrip", "_");
-			movie = movie.Replace(" dvdscr", "_");
-			movie = movie.Replace(" dvd", "_");
-			movie = movie.Replace(" r5", "_");
-			movie = movie.Replace(" ts", "_");
-			movie = movie.Replace(" kvcd", "_");
-			movie = movie.Replace(" xvid", "_");
-			movie = movie.Replace(" divx", "_");
-			movie = movie.Replace(" x264", "_");
-			movie = movie.Replace(" 720p", "_");
-			movie = movie.Replace(" ts", "_");
-			movie = movie.Replace(" ws", "_");
-			movie = movie.Replace(" proper", "_");
-			movie = movie.Replace(" bluray", "_");
-			movie = movie.Replace(" hd-dvd", "_");
-			movie = movie.Replace(" hd-screener", "_");
-			movie = movie.Replace(" sub", "_");
-
-			int left = movie.Split('_')[0].Trim().Length;
-			return originalName.Substring(0, left);
-		}
-
-		private static string CleanUp(string name)
-		{
-			name = name.Replace('.', ' ');
-
-			name = GetMovieNameForYearMatch(name);
-			name = GetMovieNameBySplittingParts(name);
-
-			return name;
-		}
-		private static void Setup()
-		{
-			_movieFolder = ConfigReader.Config.MovieFolder;
+			catch(Exception e)
+			{
+				NotifoPushNotification.Send(MediaType.Movie, "Movie Error", string.Format("Unable to create folder: {0}", e.Message));
+				_error = true;
+				return;
+			}
+			
+			/* 4 */
+			if(job.MoveMovie(movieDirectory) == false)
+			{
+				job.Status = SabNzbdStatus.FailedMoveMovie;
+			}
+			job.Status = SabNzbdStatus.Ok;
 		}
 	}
 }

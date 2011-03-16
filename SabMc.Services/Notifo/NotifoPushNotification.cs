@@ -10,7 +10,7 @@ namespace SabMc.Services.Notifo
 		private static string _username;
 		private static string _secret;
 		private static bool _enabled;
-
+		
 		public static void Send(SabNzbdJob job)
 		{
 			switch (job.Status)
@@ -18,6 +18,7 @@ namespace SabMc.Services.Notifo
 				case SabNzbdStatus.FailedUnpacking:
 				case SabNzbdStatus.FailedTvRenamer:
 				case SabNzbdStatus.FailedVerification:
+				case SabNzbdStatus.FailedMoveMovie:
 					Send(job, job.FolderName);
 					break;
 				default:
@@ -45,6 +46,10 @@ namespace SabMc.Services.Notifo
 				case SabNzbdStatus.FailedVerification:
 					title = "Verification error";
 					message = string.Format("Verification error occured on {0}", jobName);
+					break;
+				case SabNzbdStatus.FailedMoveMovie:
+					title = "Move error";
+					message = string.Format("Failed to move folder: {0}", jobName);
 					break;
 				default:
 					title = "Success";

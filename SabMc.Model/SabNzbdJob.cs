@@ -7,16 +7,18 @@ namespace SabMc.Model
 	public class SabNzbdJob
 	{
 		private readonly DirectoryInfo directory;
-		private FileInfo fileInfo = null;
+		private FileInfo fileInfo;
+		private DirectoryInfo dirInfo;
 		private MediaType mediaType = MediaType.Other;
 		private SabNzbdStatus status;
+		private bool handleMovieFolder;
 
 		public SabNzbdJob(string[] args)
 		{
 			// Set Directory and File
 			string path = args[0];
 			directory = new DirectoryInfo(path);
-			
+
 			// Check Status
 			status = GetStatusFromArgs(args);
 			Console.WriteLine(string.Format("== Initial SabNzbd status code: {0} ==", status));
@@ -40,11 +42,12 @@ namespace SabMc.Model
 						DirectoryInfo[] directoryList = directory.GetDirectories("VIDEO_TS", SearchOption.AllDirectories);
 						if (directoryList.Length == 1)
 						{
-							// DVD
-
+							handleMovieFolder = true;
+							dirInfo = directoryList[0].Parent;	// 1 up
 						}
 						else
 						{
+							handleMovieFolder = false;
 							// handle largest file
 							HandleGetLargestFile(false);
 							// larger than 300 mb ?
@@ -52,7 +55,7 @@ namespace SabMc.Model
 //							{
 //								// weird movie if it's smaller than 300 mb and hasn't got a VIDEO_TS folder?
 //								status = SabNzbdStatus.FailedVerification;
-//								return;
+//								break;
 //							}
 						}
 						status = SabNzbdStatus.Ok;
@@ -69,9 +72,48 @@ namespace SabMc.Model
 			Console.WriteLine(string.Format("== After process status code: {0} ==", status));
 		}
 
-		public void MoveMovie(DirectoryInfo di)
+		public void CleanUp()
 		{
-			fileInfo.CopyTo(Path.Combine(di.FullName, fileInfo.Name));
+			if (status != SabNzbdStatus.Ok)
+				return;
+			
+			directory.Delete(true);
+		}
+
+		public bool MoveMovie(DirectoryInfo di)
+		{
+			try
+			{
+				if (mediaType != Enums.MediaType.Movie)
+					return true;
+
+				// handle a folder?
+				if (handleMovieFolder)
+				{
+					// Move Folders
+					DirectoryInfo[] folders = dirInfo.GetDirectories("*.*", SearchOption.TopDirectoryOnly);
+					foreach (DirectoryInfo folder in folders)
+					{
+						folder.MoveTo(Path.Combine(di.FullName, folder.Name));
+					}
+					// Move files
+					FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly);
+					foreach (FileInfo file in files)
+					{
+						file.MoveTo(Path.Combine(di.FullName, file.Name));
+					}
+				}
+				else
+				{
+					// just move the file
+					fileInfo.MoveTo(Path.Combine(di.FullName, fileInfo.Name));
+				}
+				return true;
+			}
+			catch(Exception e)
+			{
+				return false;
+			}
 		}
 
 		private void HandleGetLargestFile(bool delete)
@@ -90,7 +132,7 @@ namespace SabMc.Model
 				else
 				{
 					// smaller, so delete
-					if(delete)
+					if (delete)
 						file.Delete();
 				}
 			}
@@ -127,6 +169,7 @@ namespace SabMc.Model
 			return retval;
 		}
 
+		#region Properties
 		public SabNzbdStatus Status
 		{
 			get { return status; }
@@ -142,11 +185,17 @@ namespace SabMc.Model
 		}
 		public string FileName
 		{
-			get { return fileInfo.Name; }
+			get
+			{
+				if (handleMovieFolder)
+					return dirInfo.Name;
+				return fileInfo.Name;
+			}
 		}
 		public MediaType MediaType
 		{
 			get { return mediaType; }
 		}
+		#endregion
 	}
 }

@@ -5,6 +5,7 @@ namespace SabMc.Model.Enums
 		Ok = 0,
 		FailedVerification = 1,
 		FailedUnpacking = 2,
-		FailedTvRenamer = 3
+		FailedTvRenamer = 3,
+		FailedMoveMovie = 4
 	}
 }

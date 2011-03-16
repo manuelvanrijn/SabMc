@@ -29,9 +29,10 @@ namespace SabMc.TvShow
 				if (job.Status == SabNzbdStatus.Ok)
 				{
 					Process(job);
-
 					// send xbmc update library signal
 					UpdateLibrary.UpdateVideoLibrary();
+					// remove old files
+					job.CleanUp();
 				}
 
 				// send notifio notification
@@ -45,6 +46,7 @@ namespace SabMc.TvShow
 
 			Console.WriteLine("== FINISHED SABMC.TVSHOW PROCESS ==");
 		}
+
 		private static void Process(SabNzbdJob job)
 		{
 			string appPath = AppDomain.CurrentDomain.BaseDirectory;
