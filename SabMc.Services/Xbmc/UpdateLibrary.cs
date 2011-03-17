@@ -4,6 +4,9 @@ namespace SabMc.Services.Xbmc
 	using System.Net;
 	using Config;
 
+	/// <summary>
+	/// XBMC Helper class for updating the library
+	/// </summary>
 	public static class UpdateLibrary
 	{
 		private static string _username;
@@ -12,6 +15,10 @@ namespace SabMc.Services.Xbmc
 		private static int _portnumber;
 		private static bool _enabled;
 
+		/// <summary>
+		/// Update the XBMC's Video Library
+		/// </summary>
+		/// <returns>updated</returns>
 		public static bool UpdateVideoLibrary()
 		{
 			Setup();
@@ -39,6 +46,10 @@ namespace SabMc.Services.Xbmc
 			}
 
 		}
+
+		/// <summary>
+		/// Read's the configuration file's properties
+		/// </summary>
 		private static void Setup()
 		{
 			_username = ConfigReader.Config.XbmcUsername;

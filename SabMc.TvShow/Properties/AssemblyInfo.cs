@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("SabMc.TvShow")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("SabMc.TvShow process")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Auxilium BV")]
+[assembly: AssemblyCompany("Manuel van Rijn")]
 [assembly: AssemblyProduct("SabMc.TvShow")]
-[assembly: AssemblyCopyright("Copyright © Auxilium BV 2011")]
+[assembly: AssemblyCopyright("Copyright © Manuel van Rijn 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

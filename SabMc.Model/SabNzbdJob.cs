@@ -4,6 +4,9 @@ namespace SabMc.Model
 	using System.IO;
 	using Enums;
 
+	/// <summary>
+	/// Model for a SabNZBD Job
+	/// </summary>
 	public class SabNzbdJob
 	{
 		private readonly DirectoryInfo directory;
@@ -13,6 +16,10 @@ namespace SabMc.Model
 		private SabNzbdStatus status;
 		private bool handleMovieFolder;
 
+		/// <summary>
+		/// Constructs a SabNZBD object from the passed arguments of SabNZBD
+		/// </summary>
+		/// <param name="args">SabNZBD arguments</param>
 		public SabNzbdJob(string[] args)
 		{
 			// Set Directory and File
@@ -23,6 +30,10 @@ namespace SabMc.Model
 			status = GetStatusFromArgs(args);
 			Console.WriteLine(string.Format("== Initial SabNzbd status code: {0} ==", status));
 		}
+		/// <summary>
+		/// Process the Job for a specific media type
+		/// </summary>
+		/// <param name="type">Mediatype of the job</param>
 		public void Process(MediaType type)
 		{
 			mediaType = type;
@@ -51,12 +62,12 @@ namespace SabMc.Model
 							// handle largest file
 							HandleGetLargestFile(false);
 							// larger than 300 mb ?
-//							if (GetFileLength(fileInfo) < (1024 * 1024 * 300))
-//							{
-//								// weird movie if it's smaller than 300 mb and hasn't got a VIDEO_TS folder?
-//								status = SabNzbdStatus.FailedVerification;
-//								break;
-//							}
+							if (GetFileLength(fileInfo) < (1024 * 1024 * 300))
+							{
+								// weird movie if it's smaller than 300 mb and hasn't got a VIDEO_TS folder?
+								status = SabNzbdStatus.FailedVerification;
+								break;
+							}
 						}
 						status = SabNzbdStatus.Ok;
 						break;
@@ -72,14 +83,22 @@ namespace SabMc.Model
 			Console.WriteLine(string.Format("== After process status code: {0} ==", status));
 		}
 
+		/// <summary>
+		/// Remove old/unused files and folder of the job
+		/// </summary>
 		public void CleanUp()
 		{
-			if (status != SabNzbdStatus.Ok)
+			if (status != SabNzbdStatus.Ok || mediaType == MediaType.TvShow)
 				return;
 			
 			directory.Delete(true);
 		}
 
+		/// <summary>
+		/// Move's the Movie to it's destination
+		/// </summary>
+		/// <param name="di">The Movie folder to move</param>
+		/// <returns>if all went OK</returns>
 		public bool MoveMovie(DirectoryInfo di)
 		{
 			try
@@ -96,11 +115,14 @@ namespace SabMc.Model
 					{
 						folder.MoveTo(Path.Combine(di.FullName, folder.Name));
 					}
-					// Move files
+					// Move files (larger than 300 mb)
 					FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.TopDirectoryOnly);
 					foreach (FileInfo file in files)
 					{
-						file.MoveTo(Path.Combine(di.FullName, file.Name));
+						if (GetFileLength(file) >= (1024 * 1024 * 300))
+						{
+							file.MoveTo(Path.Combine(di.FullName, file.Name));
+						}
 					}
 				}
 				else
@@ -115,7 +137,10 @@ namespace SabMc.Model
 				return false;
 			}
 		}
-
+		/// <summary>
+		/// Get the largest file from a folder (recursive)
+		/// </summary>
+		/// <param name="delete">delete other files than are smaller?</param>
 		private void HandleGetLargestFile(bool delete)
 		{
 			FileInfo[] fileList = directory.GetFiles("*.*", SearchOption.AllDirectories);	// recursive
@@ -137,7 +162,11 @@ namespace SabMc.Model
 				}
 			}
 		}
-
+		/// <summary>
+		/// Strips the status from the arguments
+		/// </summary>
+		/// <param name="args">SabNZBD arguments</param>
+		/// <returns>The SabNzbdStatus</returns>
 		private static SabNzbdStatus GetStatusFromArgs(string[] args)
 		{
 			int lastIndex = args.Length - 1;
@@ -152,6 +181,11 @@ namespace SabMc.Model
 					return SabNzbdStatus.Ok;
 			}
 		}
+		/// <summary>
+		/// Safe get file lenght method 
+		/// </summary>
+		/// <param name="fi">FileInfo file</param>
+		/// <returns>the length</returns>
 		private static long GetFileLength(FileInfo fi)
 		{
 			long retval;
@@ -170,20 +204,33 @@ namespace SabMc.Model
 		}
 
 		#region Properties
+
+		/// <summary>
+		/// The Status
+		/// </summary>
 		public SabNzbdStatus Status
 		{
 			get { return status; }
 			set { status = value; }
 		}
+		/// <summary>
+		/// Fullname of the directory where the files are located
+		/// </summary>
 		public string FullFolderName
 		{
 			get { return directory.FullName; }
 		}
+		/// <summary>
+		/// The foldername of the job
+		/// </summary>
 		public string FolderName
 		{
 			get { return directory.Name; }
 		}
-		public string FileName
+		/// <summary>
+		/// The name of the job (filename or directory name)
+		/// </summary>
+		public string Name
 		{
 			get
 			{
@@ -192,10 +239,14 @@ namespace SabMc.Model
 				return fileInfo.Name;
 			}
 		}
+		/// <summary>
+		/// The mediatype of the job
+		/// </summary>
 		public MediaType MediaType
 		{
 			get { return mediaType; }
 		}
+
 		#endregion
 	}
 }

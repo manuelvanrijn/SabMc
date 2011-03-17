@@ -3,8 +3,16 @@ namespace SabMc.Movie
 	using System;
 	using System.Text.RegularExpressions;
 
+	/// <summary>
+	/// Class for cleaning up the serie/movie name
+	/// </summary>
 	public static class VideoHelper
 	{
+		/// <summary>
+		/// Returns a clean name of the movie
+		/// </summary>
+		/// <param name="name">dirty name</param>
+		/// <returns>clean name</returns>
 		public static string GetCleanName(string name)
 		{
 			name = name.Replace('.', ' ');
@@ -15,6 +23,11 @@ namespace SabMc.Movie
 			return name;
 		}
 
+		/// <summary>
+		/// Strips the left part when year is found in the name
+		/// </summary>
+		/// <param name="movie">name with year</param>
+		/// <returns>stripped name</returns>
 		private static string GetMovieNameForYearMatch(string movie)
 		{
 			string movieName = movie;
@@ -31,6 +44,11 @@ namespace SabMc.Movie
 			return movieName;
 		}
 
+		/// <summary>
+		/// Remove some commonly used strings we don't need for searching the movie name
+		/// </summary>
+		/// <param name="movie">the dirty move name</param>
+		/// <returns>clean movie name</returns>
 		private static string GetMovieNameBySplittingParts(string movie)
 		{
 			string originalName = movie;
@@ -54,6 +72,12 @@ namespace SabMc.Movie
 			movie = movie.Replace(" hd-dvd", "_");
 			movie = movie.Replace(" hd-screener", "_");
 			movie = movie.Replace(" sub", "_");
+			
+			movie = movie.Replace(" par", "_");
+			movie = movie.Replace(" par2", "_");
+			movie = movie.Replace(" zip", "_");
+			movie = movie.Replace(" rar", "_");
+			movie = movie.Replace(" torrent", "_");
 
 			int left = movie.Split('_')[0].Trim().Length;
 			return originalName.Substring(0, left);

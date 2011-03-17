@@ -1,5 +1,8 @@
 namespace SabMc.Model
 {
+	/// <summary>
+	/// SabMC Configuration Instance
+	/// </summary>
 	public class ConfigData
 	{
 		// NOTIFO
@@ -32,50 +35,71 @@ namespace SabMc.Model
 		}
 
 		#region Properties Notifo
+		
+		/// <summary>
+		/// Use Notifo Service
+		/// </summary>
 		public bool NotifoEnabled
 		{
 			get { return notifoEnabled; }
 			set { notifoEnabled = value; }
 		}
-
+		/// <summary>
+		/// Notifo API Key
+		/// </summary>
 		public string NotifoApiKey
 		{
 			get { return notifoApiKey; }
 			set { notifoApiKey = value; }
 		}
-
+		/// <summary>
+		/// Notifo Username
+		/// </summary>
 		public string NotifoUsename
 		{
 			get { return notifoUsename; }
 			set { notifoUsename = value; }
 		}
+
 		#endregion
 
 		#region Properties XBMC
+		
+		/// <summary>
+		/// Update XBMC on Finish
+		/// </summary>
 		public bool XbmcUpdateOnFinish
 		{
 			get { return xbmcUpdateOnFinish; }
 			set { xbmcUpdateOnFinish = value; }
 		}
-
+		/// <summary>
+		/// XBMC Webinterface username
+		/// </summary>
 		public string XbmcUsername
 		{
 			get { return xbmcUsername; }
 			set { xbmcUsername = value; }
 		}
-
+		/// <summary>
+		/// XBMC Webinterface password
+		/// </summary>
 		public string XbmcPassword
 		{
 			get { return xbmcPassword; }
 			set { xbmcPassword = value; }
 		}
-
+		/// <summary>
+		/// XBMC Hostname/IP Address
+		/// </summary>
 		public string XbmcHostname
 		{
 			get { return xbmcHostname; }
 			set { xbmcHostname = value; }
 		}
-
+		/// <summary>
+		/// XBMC Port number
+		/// </summary>
 		public int XbmcPortnumber
 		{
 			get { return xbmcPortnumber; }
@@ -85,7 +109,10 @@ namespace SabMc.Model
 		#endregion
 
 		#region Properties Movie Path
-
+		
+		/// <summary>
+		/// Folder to move Movie's to when finished
+		/// </summary>
 		public string MovieFolder
 		{
 			get { return movieFolder; }

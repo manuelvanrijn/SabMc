@@ -5,10 +5,16 @@ namespace SabMc.Services.Config
 	using System.Xml.Serialization;
 	using Model;
 
+	/// <summary>
+	/// SabMC Configuration reader
+	/// </summary>
 	public class ConfigReader
 	{
 		private static ConfigData _config = null;
 
+		/// <summary>
+		/// The config data
+		/// </summary>
 		public static ConfigData Config
 		{
 			get
@@ -19,6 +25,10 @@ namespace SabMc.Services.Config
 			}
 		}
 
+		/// <summary>
+		/// Read the config data from file
+		/// </summary>
+		/// <returns></returns>
 		private static ConfigData GetConfigData()
 		{
 			if (!File.Exists(ConfigFilePath))
@@ -40,6 +50,11 @@ namespace SabMc.Services.Config
 				}
 			}
 		}
+
+		/// <summary>
+		/// Check if config file excists 
+		/// </summary>
+		/// <returns>if excists</returns>
 		public static bool CheckConfig()
 		{
 			if (!File.Exists(ConfigFilePath))
@@ -54,6 +69,12 @@ namespace SabMc.Services.Config
 			}
 			return true;
 		}
+
+		/// <summary>
+		/// Save the config data to the configuration file
+		/// </summary>
+		/// <param name="config">Config data</param>
+		/// <returns>saved?</returns>
 		public static bool SaveConfigData(ConfigData config)
 		{
 			if (!File.Exists(ConfigFilePath)) return false; // don't do anything if file doesn't exist
@@ -66,6 +87,9 @@ namespace SabMc.Services.Config
 			}
 		}
 
+		/// <summary>
+		/// Get the configuration file's path
+		/// </summary>
 		public static string ConfigFilePath
 		{
 			get

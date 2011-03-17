@@ -31,10 +31,13 @@ namespace SabMc.Movie
 				if (job.Status == SabNzbdStatus.Ok)
 				{
 					Process(job);
-					// send xbmc update library signal
-					UpdateLibrary.UpdateVideoLibrary();
-					// remove old files
-					job.CleanUp();
+					if (_error == false)
+					{
+						// send xbmc update library signal
+						UpdateLibrary.UpdateVideoLibrary();
+						// remove old files
+						job.CleanUp();
+					}
 				}
 				if (_error == false)
 				{

@@ -5,12 +5,19 @@ namespace SabMc.Services.Notifo
 	using Model;
 	using Model.Enums;
 
+	/// <summary>
+	/// SabMC Notifo Helper
+	/// </summary>
 	public static class NotifoPushNotification
 	{
 		private static string _username;
 		private static string _secret;
 		private static bool _enabled;
 		
+		/// <summary>
+		/// Send Message for SabNzbdJob
+		/// </summary>
+		/// <param name="job">SabNZBD Job</param>
 		public static void Send(SabNzbdJob job)
 		{
 			switch (job.Status)
@@ -25,10 +32,16 @@ namespace SabMc.Services.Notifo
 					if (job.MediaType == MediaType.Other)
 						Send(job, job.FolderName);
 					else
-						Send(job, job.FileName);
+						Send(job, job.Name);
 					break;
 			}
 		}
+
+		/// <summary>
+		/// Send Message for SabNzbdJob with custom job name
+		/// </summary>
+		/// <param name="job">SabNZBD Job</param>
+		/// <param name="jobName">Custom job name</param>
 		public static void Send(SabNzbdJob job, string jobName)
 		{
 			string title, message;
@@ -63,6 +76,12 @@ namespace SabMc.Services.Notifo
 			Send(job.MediaType, title, message);
 		}
 		
+		/// <summary>
+		/// Send Message for Parameters
+		/// </summary>
+		/// <param name="mediaType">The mediatype</param>
+		/// <param name="title">The title</param>
+		/// <param name="message">The Message</param>
 		public static void Send(MediaType mediaType, string title, string message)
 		{
 			Setup();
@@ -84,6 +103,10 @@ namespace SabMc.Services.Notifo
 
 			service.Send(_username, label, title, message);
 		}
+
+		/// <summary>
+		/// Read configuration properties
+		/// </summary>
 		private static void Setup()
 		{
 			_secret = ConfigReader.Config.NotifoApiKey;

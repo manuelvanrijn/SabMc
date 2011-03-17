@@ -37,6 +37,3 @@ del /Q *.vshost.exe
 del /Q config.xml
 
 cd ../../
-
-:End
-pause

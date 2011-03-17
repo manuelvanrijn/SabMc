@@ -29,10 +29,13 @@ namespace SabMc.TvShow
 				if (job.Status == SabNzbdStatus.Ok)
 				{
 					Process(job);
-					// send xbmc update library signal
-					UpdateLibrary.UpdateVideoLibrary();
-					// remove old files
-					job.CleanUp();
+					if (job.Status == SabNzbdStatus.Ok)
+					{
+						// send xbmc update library signal
+						UpdateLibrary.UpdateVideoLibrary();
+						// remove old files
+						job.CleanUp();
+					}
 				}
 
 				// send notifio notification
@@ -60,7 +63,7 @@ namespace SabMc.TvShow
 			startInfo.WorkingDirectory = workingDirectory;
 			
 			// TVRenamer only uses args 1, 3 and 7
-			startInfo.Arguments = string.Format("\"{0}\" 0 \"{1}\" 0 0 0 0", job.FullFolderName, job.FileName);
+			startInfo.Arguments = string.Format("\"{0}\" 0 \"{1}\" 0 0 0 0", job.FullFolderName, job.Name);
 			try
 			{
 				using (Process exeProcess = System.Diagnostics.Process.Start(startInfo))

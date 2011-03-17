@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SabMc.Model")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Auxilium BV")]
+[assembly: AssemblyCompany("Manuel van Rijn")]
 [assembly: AssemblyProduct("SabMc.Model")]
-[assembly: AssemblyCopyright("Copyright © Auxilium BV 2011")]
+[assembly: AssemblyCopyright("Copyright © Manuel van Rijn 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

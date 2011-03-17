@@ -5,6 +5,9 @@ using System.Collections.Specialized;
 
 namespace SabMc.Services.Notifo
 {
+	/// <summary>
+	/// API Class for the Notifo Notification Service
+	/// </summary>
 	public class NotifoApi
 	{
 		private const string ApiUrl = "https://api.notifo.com/v1/send_notification";
@@ -17,16 +20,39 @@ namespace SabMc.Services.Notifo
 		private string label = string.Empty;
 		private string link = string.Empty;
 
+		/// <summary>
+		/// NotifoApi
+		/// </summary>
+		/// <param name="apiUsername">username</param>
+		/// <param name="apiSecret">api key</param>
 		public NotifoApi(string apiUsername, string apiSecret)
 		{
 			this.apiUsername = apiUsername;
 			this.apiSecret = apiSecret;
 		}
 
+		/// <summary>
+		/// Send Notification
+		/// </summary>
+		/// <param name="to">to username</param>
+		/// <param name="label">label</param>
+		/// <param name="title">title</param>
+		/// <param name="message">message</param>
+		/// <returns>was send</returns>
 		public bool Send(string to, string label, string title, string message)
 		{
 			return Send(to, label, title, message, "");
 		}
+
+		/// <summary>
+		/// Send Notification
+		/// </summary>
+		/// <param name="to">to username</param>
+		/// <param name="label">label</param>
+		/// <param name="title">title</param>
+		/// <param name="message">message</param>
+		/// <param name="link">embedded url</param>
+		/// <returns>was send</returns>
 		public bool Send(string to, string label, string title, string message, string link)
 		{
 			this.to = to;
@@ -34,9 +60,13 @@ namespace SabMc.Services.Notifo
 			this.title = title;
 			this.message = message;
 			this.link = link;
-			return this.Send();
+			return Send();
 		}
 
+		/// <summary>
+		/// Send the Notification
+		/// </summary>
+		/// <returns>was send</returns>
 		protected bool Send()
 		{
 			WebClient wb = new WebClient();

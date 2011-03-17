@@ -3,12 +3,20 @@ namespace SabMc.Movie
 	using System.Threading;
 	using Imdb;
 
+	/// <summary>
+	/// Helper for finding information from IMDB
+	/// </summary>
 	public static class ImdbHelper
 	{
 		private static bool _busy, _hasError;
 		private static string _errorMessage, _name;
 		private static Movie _result;
 
+		/// <summary>
+		/// Returns the Movie if exactly found 1 match
+		/// </summary>
+		/// <param name="name">search string</param>
+		/// <returns>errors?</returns>
 		public static bool GetMovie(string name)
 		{
 			Init(name);
@@ -24,6 +32,10 @@ namespace SabMc.Movie
 
 			return _hasError;
 		}
+		/// <summary>
+		/// Set's default param's before starting the search
+		/// </summary>
+		/// <param name="name">search string</param>
 		private static void Init(string name)
 		{
 			_busy = true;
@@ -33,7 +45,10 @@ namespace SabMc.Movie
 
 			_name = name;
 		}
-
+		/// <summary>
+		/// Callback from the IMDB Service
+		/// </summary>
+		/// <param name="resultSet">Set with results</param>
 		static void ServiceFoundMovies(MoviesResultset resultSet)
 		{
 			if (resultSet.Error)
@@ -57,40 +72,39 @@ namespace SabMc.Movie
 				_result = resultSet.ExactMatches[0];
 				//Console.WriteLine(string.Format("Success: {0}", movie.Title));
 			}
-//				DirectoryInfo di = new DirectoryInfo(Path.Combine(_movieFolder, movie.Title));
-//				if (di.Exists == false)
-//				{
-//					di.Create();
-//					job.MoveMovie(di);
-//					NotifoPushNotification.Send(job);
-//					UpdateLibrary.UpdateVideoLibrary();
-//					Environment.Exit(0);
-//				}
-//				else
-//				{
-//					NotifoPushNotification.Send(MediaType.Movie, "Move error", string.Format("Folder: '{0}' already excists", di.FullName));
-//					Environment.Exit(1);
-//				}
-//			}
-//
-//			// ehhh ?
-//			NotifoPushNotification.Send(MediaType.Movie, "Error", "weird error with the imdb searcher.");
-//			Environment.Exit(1);
-
+			else
+			{
+				// nothing found????
+				_hasError = true;
+				_errorMessage = string.Format("Found no matches for: {0}", _name);
+			}
 			_busy = false;
 		}
 
+		#region Properties
+
+		/// <summary>
+		/// Has Errors
+		/// </summary>
 		public static bool HasError
 		{
 			get { return _hasError; }
 		}
+		/// <summary>
+		/// Error message
+		/// </summary>
 		public static string ErrorMessage
 		{
 			get { return _errorMessage; }
 		}
+		/// <summary>
+		/// Found Movie
+		/// </summary>
 		public static Movie Movie
 		{
 			get { return _result; }
 		}
+
+		#endregion
 	}
 }
