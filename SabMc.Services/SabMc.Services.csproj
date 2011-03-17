@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\ConfigReader.cs" />
+    <Compile Include="Helpers\VideoHelper.cs" />
     <Compile Include="Notifo\NotifoApi.cs" />
     <Compile Include="Notifo\NotifoPushNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

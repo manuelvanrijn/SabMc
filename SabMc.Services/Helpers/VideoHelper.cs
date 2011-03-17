@@ -1,4 +1,4 @@
-namespace SabMc.Movie
+namespace SabMc.Services.Helpers
 {
 	using System;
 	using System.Collections.Generic;
