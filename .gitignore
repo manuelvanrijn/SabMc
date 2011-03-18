@@ -1,6 +1,7 @@
 _ReSharper*
 *resharper*
 *.user
+*.config
 *.suo
 **/bin/
 **/Bin/
