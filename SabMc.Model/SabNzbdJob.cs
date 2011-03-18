@@ -30,6 +30,7 @@ namespace SabMc.Model
 			status = GetStatusFromArgs(args);
 			Console.WriteLine(string.Format("== Initial SabNzbd status code: {0} ==", status));
 		}
+
 		/// <summary>
 		/// Process the Job for a specific media type
 		/// </summary>
@@ -137,6 +138,7 @@ namespace SabMc.Model
 				return false;
 			}
 		}
+
 		/// <summary>
 		/// Get the largest file from a folder (recursive)
 		/// </summary>
@@ -162,6 +164,7 @@ namespace SabMc.Model
 				}
 			}
 		}
+
 		/// <summary>
 		/// Strips the status from the arguments
 		/// </summary>
@@ -181,6 +184,7 @@ namespace SabMc.Model
 					return SabNzbdStatus.Ok;
 			}
 		}
+
 		/// <summary>
 		/// Safe get file lenght method 
 		/// </summary>
@@ -213,6 +217,7 @@ namespace SabMc.Model
 			get { return status; }
 			set { status = value; }
 		}
+
 		/// <summary>
 		/// Fullname of the directory where the files are located
 		/// </summary>
@@ -220,6 +225,7 @@ namespace SabMc.Model
 		{
 			get { return directory.FullName; }
 		}
+
 		/// <summary>
 		/// The foldername of the job
 		/// </summary>
@@ -227,6 +233,7 @@ namespace SabMc.Model
 		{
 			get { return directory.Name; }
 		}
+
 		/// <summary>
 		/// The name of the job (filename or directory name)
 		/// </summary>
@@ -239,6 +246,7 @@ namespace SabMc.Model
 				return fileInfo.Name;
 			}
 		}
+
 		/// <summary>
 		/// The mediatype of the job
 		/// </summary>

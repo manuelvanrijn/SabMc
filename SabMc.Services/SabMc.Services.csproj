@@ -28,12 +28,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Config\ConfigReader.cs" />
     <Compile Include="Helpers\VideoHelper.cs" />
     <Compile Include="Notifo\NotifoApi.cs" />
@@ -46,6 +40,10 @@
       <Project>{1FE3BD10-691B-4A0F-BA36-CF805AC0317B}</Project>
       <Name>SabMc.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

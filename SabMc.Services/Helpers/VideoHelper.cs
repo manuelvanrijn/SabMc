@@ -118,6 +118,7 @@ namespace SabMc.Services.Helpers
 		{
 			get { return new List<string>(new string[] { "divx6", "divx", "xvid", "h264", "x264", "h.264", "kvcd", "stv", "dxva" }); }
 		}
+
 		/// <summary>
 		/// List of audio codecs
 		/// </summary>
@@ -125,6 +126,7 @@ namespace SabMc.Services.Helpers
 		{
 			get { return new List<string>(new string[] { "ac3", "dts", "dd", "aac", "engdts", "freac3" }); }
 		}
+
 		/// <summary>
 		/// List of different resolutions
 		/// </summary>
@@ -132,6 +134,7 @@ namespace SabMc.Services.Helpers
 		{
 			get { return new List<string>(new string[] { "720p", "1080p", "1080i", "hd", "576", "720", "1080" }); }
 		}
+
 		/// <summary>
 		/// List of sources
 		/// </summary>
@@ -139,6 +142,7 @@ namespace SabMc.Services.Helpers
 		{
 			get { return new List<string>(new string[] { "tvrip", "pal", "ntsc", "bdrip", "blurayrip", "blu-ray", "bd-rip", "dvdr", "dvd5", "dvd9", "hdtv", "cam", "dvdscr", "dvd", "r5", "ts", "ws", "proper", "hd-dvd", "hddvd", "hd-screener", "hdscreener", "vob", "dl", "dd", "dd5 1", "5 1", "L4 1", "rip", "scr", "screener", "wmv", "oar", "mpeg", "dsr", "r1", "r2", "r3", "r4", "r5", "bd5", "bd9", "dtv", "stv", "xvid", "divx", "x264", "2in1", "limited", "proper", "fixed", "repack", "rerip", "retail", "extended", "remastered", "unrated", "chrono", "uncut" }); }
 		}
+
 		/// <summary>
 		/// List with strings to replace
 		/// </summary>

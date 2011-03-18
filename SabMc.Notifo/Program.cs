@@ -1,7 +1,6 @@
-using System;
-
 namespace SabMc.Notifo
 {
+	using System;
 	using Model;
 	using Services.Config;
 	using Services.Notifo;

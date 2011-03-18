@@ -32,6 +32,7 @@ namespace SabMc.Movie
 
 			return _hasError;
 		}
+
 		/// <summary>
 		/// Set's default param's before starting the search
 		/// </summary>
@@ -45,6 +46,7 @@ namespace SabMc.Movie
 
 			_name = name;
 		}
+
 		/// <summary>
 		/// Callback from the IMDB Service
 		/// </summary>
@@ -90,6 +92,7 @@ namespace SabMc.Movie
 		{
 			get { return _hasError; }
 		}
+
 		/// <summary>
 		/// Error message
 		/// </summary>
@@ -97,6 +100,7 @@ namespace SabMc.Movie
 		{
 			get { return _errorMessage; }
 		}
+
 		/// <summary>
 		/// Found Movie
 		/// </summary>

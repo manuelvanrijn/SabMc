@@ -14,11 +14,11 @@ namespace SabMc.Services.Notifo
 		private readonly string apiUsername;
 		private readonly string apiSecret;
 
-		private string to = string.Empty;
-		private string message = string.Empty;
-		private string title = string.Empty;
-		private string label = string.Empty;
-		private string link = string.Empty;
+		private string notifoUsername = string.Empty;
+		private string notifoMessage = string.Empty;
+		private string notifoTitle = string.Empty;
+		private string notifoLabel = string.Empty;
+		private string notifoLink = string.Empty;
 
 		/// <summary>
 		/// NotifoApi
@@ -55,11 +55,11 @@ namespace SabMc.Services.Notifo
 		/// <returns>was send</returns>
 		public bool Send(string to, string label, string title, string message, string link)
 		{
-			this.to = to;
-			this.label = label;
-			this.title = title;
-			this.message = message;
-			this.link = link;
+			notifoUsername = to;
+			notifoLabel = label;
+			notifoTitle = title;
+			notifoMessage = message;
+			notifoLink = link;
 			return Send();
 		}
 
@@ -79,11 +79,11 @@ namespace SabMc.Services.Notifo
 			wb.Headers.Add("Authorization", "Basic " + auth);
 
 			NameValueCollection nvc = new NameValueCollection();
-			nvc.Add("to", to);
-			nvc.Add("msg", message);
-			nvc.Add("label", label);
-			nvc.Add("title", title);
-			nvc.Add("uri", link);
+			nvc.Add("to", notifoUsername);
+			nvc.Add("msg", notifoMessage);
+			nvc.Add("label", notifoLabel);
+			nvc.Add("title", notifoTitle);
+			nvc.Add("uri", notifoLink);
 			
 			//send message
 			try
@@ -98,6 +98,5 @@ namespace SabMc.Services.Notifo
 
 			return true;
 		}
-
 	}
 }

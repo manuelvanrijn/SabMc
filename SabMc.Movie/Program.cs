@@ -34,15 +34,12 @@ namespace SabMc.Movie
 					Process(job);
 					if (_error == false)
 					{
-						// send xbmc update library signal
 						UpdateLibrary.UpdateVideoLibrary();
-						// remove old files
 						job.CleanUp();
 					}
 				}
 				if (_error == false)
 				{
-					// send notifio notification
 					NotifoPushNotification.Send(job);
 				}
 			}
@@ -57,6 +54,10 @@ namespace SabMc.Movie
 				Environment.Exit(1);
 		}
 
+		/// <summary>
+		/// Process the Job
+		/// </summary>
+		/// <param name="job">the SabNzbd Job</param>
 		private static void Process(SabNzbdJob job)
 		{
 			/*

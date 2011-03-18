@@ -47,6 +47,10 @@ namespace SabMc.TvShow
 			Console.WriteLine("== FINISHED SABMC.TVSHOW PROCESS ==");
 		}
 
+		/// <summary>
+		/// Process the Job
+		/// </summary>
+		/// <param name="job">the SabNzbd Job</param>
 		private static void Process(SabNzbdJob job)
 		{
 			string appPath = AppDomain.CurrentDomain.BaseDirectory;

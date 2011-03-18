@@ -28,11 +28,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ConfigData.cs" />
     <Compile Include="Enums\MediaType.cs" />
     <Compile Include="Enums\SabNzbdStatus.cs" />

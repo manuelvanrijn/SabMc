@@ -44,6 +44,7 @@ namespace SabMc.Model
 			get { return notifoEnabled; }
 			set { notifoEnabled = value; }
 		}
+
 		/// <summary>
 		/// Notifo API Key
 		/// </summary>
@@ -52,6 +53,7 @@ namespace SabMc.Model
 			get { return notifoApiKey; }
 			set { notifoApiKey = value; }
 		}
+
 		/// <summary>
 		/// Notifo Username
 		/// </summary>
@@ -73,6 +75,7 @@ namespace SabMc.Model
 			get { return xbmcUpdateOnFinish; }
 			set { xbmcUpdateOnFinish = value; }
 		}
+
 		/// <summary>
 		/// XBMC Webinterface username
 		/// </summary>
@@ -81,6 +84,7 @@ namespace SabMc.Model
 			get { return xbmcUsername; }
 			set { xbmcUsername = value; }
 		}
+
 		/// <summary>
 		/// XBMC Webinterface password
 		/// </summary>
@@ -89,6 +93,7 @@ namespace SabMc.Model
 			get { return xbmcPassword; }
 			set { xbmcPassword = value; }
 		}
+
 		/// <summary>
 		/// XBMC Hostname/IP Address
 		/// </summary>
@@ -97,6 +102,7 @@ namespace SabMc.Model
 			get { return xbmcHostname; }
 			set { xbmcHostname = value; }
 		}
+
 		/// <summary>
 		/// XBMC Port number
 		/// </summary>

@@ -72,7 +72,6 @@ namespace SabMc.Services.Notifo
 						message = string.Format("{0} was successfully renamed and moved to xbmc", jobName);
 					break;
 			}
-
 			Send(job.MediaType, title, message);
 		}
 		
@@ -85,7 +84,6 @@ namespace SabMc.Services.Notifo
 		public static void Send(MediaType mediaType, string title, string message)
 		{
 			Setup();
-			// Cancel
 			if (_enabled == false)
 				return;
 
