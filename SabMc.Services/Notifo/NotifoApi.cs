@@ -1,10 +1,10 @@
-using System;
-using System.Text;
-using System.Net;
-using System.Collections.Specialized;
-
 namespace SabMc.Services.Notifo
 {
+	using System;
+	using System.Text;
+	using System.Net;
+	using System.Collections.Specialized;
+
 	/// <summary>
 	/// API Class for the Notifo Notification Service
 	/// </summary>

@@ -5,6 +5,7 @@ namespace SabMc.Movie
 	using Model;
 	using Model.Enums;
 	using Services.Config;
+	using Services.Helpers;
 	using Services.Notifo;
 	using Services.Xbmc;
 

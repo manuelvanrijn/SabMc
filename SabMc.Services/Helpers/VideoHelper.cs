@@ -64,7 +64,7 @@ namespace SabMc.Services.Helpers
 			Match titleMatchYear = Regex.Match(movie, patternYear);
 			if (titleMatchYear.Success)
 			{
-				int year = 0;
+				int year;
 				Int32.TryParse(titleMatchYear.Groups["Year"].Value, out year);
 				string[] titleSplit = Regex.Split(movie, patternYear);
 				movieName = titleSplit[0].TrimEnd(' ', '(', '.').Replace('.', ' ') + " (" + year + ")";
@@ -110,33 +110,34 @@ namespace SabMc.Services.Helpers
 		}
 
 		#region Derrived Properties
+
 		/// <summary>
 		/// List of video codecs
 		/// </summary>
 		internal static List<string> VideoCodecs
 		{
-			get { return new List<string>(new string[] { "divx6", "divx", "xvid", "h264", "x264", "h.264", "kvcd",  }); }
+			get { return new List<string>(new string[] { "divx6", "divx", "xvid", "h264", "x264", "h.264", "kvcd", "stv", "dxva" }); }
 		}
 		/// <summary>
 		/// List of audio codecs
 		/// </summary>
 		internal static List<string> AudioCodecs
 		{
-			get { return new List<string>(new string[] {"ac3", "dts", "dd", "aac"}); }
+			get { return new List<string>(new string[] { "ac3", "dts", "dd", "aac", "engdts", "freac3" }); }
 		}
 		/// <summary>
 		/// List of different resolutions
 		/// </summary>
 		internal static List<string> Resolutions
 		{
-			get { return new List<string>(new string[] { "720p", "1080p", "1080i", "hd" }); }
+			get { return new List<string>(new string[] { "720p", "1080p", "1080i", "hd", "576", "720", "1080" }); }
 		}
 		/// <summary>
 		/// List of sources
 		/// </summary>
 		internal static List<string> Sources
 		{
-			get { return new List<string>(new string[] { "tvrip", "pal", "ntsc", "bdrip", "blurayrip", "blu-ray", "bd-rip", "dvdr", "dvd5", "dvd9", "hdtv", "cam", "dvdscr", "dvd", "r5", "ts", "ws", "proper", "hd-dvd", "hddvd", "hd-screener", "hdscreener", "vob" }); }
+			get { return new List<string>(new string[] { "tvrip", "pal", "ntsc", "bdrip", "blurayrip", "blu-ray", "bd-rip", "dvdr", "dvd5", "dvd9", "hdtv", "cam", "dvdscr", "dvd", "r5", "ts", "ws", "proper", "hd-dvd", "hddvd", "hd-screener", "hdscreener", "vob", "dl", "dd", "dd5 1", "5 1", "L4 1", "rip", "scr", "screener", "wmv", "oar", "mpeg", "dsr", "r1", "r2", "r3", "r4", "r5", "bd5", "bd9", "dtv", "stv", "xvid", "divx", "x264", "2in1", "limited", "proper", "fixed", "repack", "rerip", "retail", "extended", "remastered", "unrated", "chrono", "uncut" }); }
 		}
 		/// <summary>
 		/// List with strings to replace

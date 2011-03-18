@@ -1,33 +1,26 @@
 #SabNzbd XBMC processing
 ##What?
 
-Two simple scripts for processing TV Shows and Movies after SabNzbd finished downloading and a simple Notifo script.
+Three SabNzbd processing scripts:
 
-##How?
+- SabMC.TvShow - Processes downloaded tvshows
+- SabMC.Movie - Processes downloaded movies
+- SabMC.Notifo - Just sends a notification when the download is finished
 
-Step 1 - Run build.bat
+##Get Started
 
-Step 2 - Copy the files from the /release/ to the SabNzbd user script folder
-
-Step 3 - Run the "SabMc.Movie.exe" or "SabMc.TvShow.exe" to create te config. You'll see:
+- Step 1 - Run build.bat
+- Step 2 - Copy the files from the /release/ to the SabNzbd user script folder
+- Step 3 - Run on of the executables to create te config. You'll see:
 
     INFO: Config file created, please fill it :)
 
-Step 4 - Edit the just created "config.xml" TvRenamer.exe.config
+- Step 4 - Edit the just created config.xml and the TvRenamer.exe.config
 
     /config.xml
     /Libs/TvRenamer/TvRenamer.exe.config
 
-Step 5 - Set the user script to point to the right SabMc exe file
-
-##Note/TODO
-
-- At this point only the TV Show script is finished!
-- DOCUMENTATION! For now I just did some fast coding... 
-
-##Whats next?
-
-Developing the movie script for processing movie's downloaded with SabNzbd
+- Step 5 - Setup SabNZBD to point to the right executable.
 
 ##Found a bug? 
 

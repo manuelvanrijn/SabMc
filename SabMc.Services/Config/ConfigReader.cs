@@ -10,7 +10,7 @@ namespace SabMc.Services.Config
 	/// </summary>
 	public class ConfigReader
 	{
-		private static ConfigData _config = null;
+		private static ConfigData _config;
 
 		/// <summary>
 		/// The config data

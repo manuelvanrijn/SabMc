@@ -103,7 +103,7 @@ namespace SabMc.Model
 		{
 			try
 			{
-				if (mediaType != Enums.MediaType.Movie)
+				if (mediaType != MediaType.Movie)
 					return true;
 
 				// handle a folder?
@@ -132,7 +132,7 @@ namespace SabMc.Model
 				}
 				return true;
 			}
-			catch(Exception e)
+			catch(Exception)
 			{
 				return false;
 			}

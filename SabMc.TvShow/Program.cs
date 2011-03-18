@@ -31,14 +31,11 @@ namespace SabMc.TvShow
 					Process(job);
 					if (job.Status == SabNzbdStatus.Ok)
 					{
-						// send xbmc update library signal
 						UpdateLibrary.UpdateVideoLibrary();
-						// remove old files
 						job.CleanUp();
 					}
 				}
 
-				// send notifio notification
 				NotifoPushNotification.Send(job);
 			}
 			else
@@ -71,10 +68,7 @@ namespace SabMc.TvShow
 					if (exeProcess != null)
 					{
 						exeProcess.WaitForExit();
-						if (exeProcess.ExitCode == 0)
-							job.Status = SabNzbdStatus.Ok;
-						else
-							job.Status = SabNzbdStatus.FailedTvRenamer;
+						job.Status = exeProcess.ExitCode == 0 ? SabNzbdStatus.Ok : SabNzbdStatus.FailedTvRenamer;
 					}
 					else
 					{

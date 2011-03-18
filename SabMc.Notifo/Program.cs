@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SabMc.Notifo
 {
@@ -22,7 +20,6 @@ namespace SabMc.Notifo
 			if (args.Length >= 7)
 			{
 				SabNzbdJob job = new SabNzbdJob(args);
-				// send notifio notification
 				NotifoPushNotification.Send(job);
 			}
 			else
