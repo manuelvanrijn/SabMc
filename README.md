@@ -22,7 +22,7 @@ Three SabNzbd processing scripts:
 
 - Step 5 - Setup SabNZBD to point to the right executable.
 
-##Found a bug? 
+##Found a bug?
 
 Submit a bug report above or here: 
 
