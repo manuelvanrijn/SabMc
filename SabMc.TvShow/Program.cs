@@ -6,6 +6,7 @@ namespace SabMc.TvShow
 	using Model;
 	using Model.Enums;
 	using Services.Config;
+	using Services.Helpers;
 	using Services.Notifo;
 	using Services.Xbmc;
 
@@ -35,8 +36,8 @@ namespace SabMc.TvShow
 						job.CleanUp();
 					}
 				}
-
-				NotifoPushNotification.Send(job);
+				string cleanMovieName = VideoHelper.GetCleanName(job.Name);
+				NotifoPushNotification.Send(job, cleanMovieName);
 			}
 			else
 			{
