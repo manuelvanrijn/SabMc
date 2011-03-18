@@ -34,6 +34,6 @@ echo Cleanup
 cd release\sabmc_%BuildTimeStamp%
 del /Q *.pdb
 del /Q *.vshost.exe
-del /Q config.xml
+del /Q *.xml
 
 cd ../../
