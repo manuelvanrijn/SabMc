@@ -1,13 +1,12 @@
 namespace SabMc.TvShow
 {
 	using System;
-	using System.Diagnostics;
-	using System.IO;
 	using Model;
 	using Model.Enums;
 	using Services.Config;
 	using Services.Helpers;
 	using Services.Notifo;
+	using Services.TheRenamer;
 	using Services.Xbmc;
 
 	class Program
@@ -16,75 +15,45 @@ namespace SabMc.TvShow
 		{
 			if(ConfigReader.CheckConfig() == false)
 			{
-				Console.WriteLine("INFO: Config file created, please fill it :)");
+				DebugHelper.WriteHeader("Config file generated");
+				DebugHelper.Info("Config file created, please fill it :)");
 				Environment.Exit(1);
 			}
 
-			Console.WriteLine("== STARTING SABMC.TVSHOW PROCESS ==");
+			DebugHelper.WriteArray("Passed arguments", args);
+			
+			DebugHelper.WriteHeader("Starting SabMC.TVShow Process");
 
 			if (args.Length >= 7)
 			{
+				DebugHelper.Log("Found enough arguments");
+				
 				SabNzbdJob job = new SabNzbdJob(args);
+				DebugHelper.Info(string.Format("Initial SabNzbd status code: {0}", job.Status));
+				DebugHelper.Log("Start processing the job");
 				job.Process(MediaType.TvShow);
-
+				
+				string cleanMovieName = VideoHelper.GetCleanName(job.FolderName);
 				if (job.Status == SabNzbdStatus.Ok)
 				{
-					Process(job);
+					DebugHelper.Log("Job status = OK before processing");
+					job = TheRenamer.Process(job);
 					if (job.Status == SabNzbdStatus.Ok)
 					{
+						DebugHelper.Log("Job status = OK after processing");
 						UpdateLibrary.UpdateVideoLibrary();
-						job.CleanUp();
+						//job.CleanUp();
 					}
 				}
-				string cleanMovieName = VideoHelper.GetCleanName(job.Name);
 				NotifoPushNotification.Send(job, cleanMovieName);
 			}
 			else
 			{
-				Console.WriteLine("ERROR: no or to few parameters passed");
+				DebugHelper.Error("No, or to few arguments where passed");
 				Environment.Exit(1);
 			}
 
-			Console.WriteLine("== FINISHED SABMC.TVSHOW PROCESS ==");
-		}
-
-		/// <summary>
-		/// Process the Job
-		/// </summary>
-		/// <param name="job">the SabNzbd Job</param>
-		private static void Process(SabNzbdJob job)
-		{
-			string appPath = AppDomain.CurrentDomain.BaseDirectory;
-			string workingDirectory = Path.Combine(appPath, "Libs\\TvRenamer\\");
-
-			ProcessStartInfo startInfo = new ProcessStartInfo();
-			startInfo.CreateNoWindow = false;
-			startInfo.UseShellExecute = false;
-			startInfo.FileName = workingDirectory + "TvRenamer.exe";
-			startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-			startInfo.WorkingDirectory = workingDirectory;
-			
-			// TVRenamer only uses args 1, 3 and 7
-			startInfo.Arguments = string.Format("\"{0}\" 0 \"{1}\" 0 0 0 0", job.FullFolderName, job.Name);
-			try
-			{
-				using (Process exeProcess = System.Diagnostics.Process.Start(startInfo))
-				{
-					if (exeProcess != null)
-					{
-						exeProcess.WaitForExit();
-						job.Status = exeProcess.ExitCode == 0 ? SabNzbdStatus.Ok : SabNzbdStatus.FailedTvRenamer;
-					}
-					else
-					{
-						throw new Exception("ERROR: can't find tvrenamer.exe ?");
-					}
-				}
-			}
-			catch (Exception)
-			{
-				job.Status = SabNzbdStatus.FailedTvRenamer;
-			}
+			DebugHelper.WriteHeader("Finished SabMC.TvShow process");
 		}
 	}
 }

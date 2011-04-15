@@ -17,8 +17,12 @@ namespace SabMc.Model
 		private string xbmcHostname = string.Empty;
 		private int xbmcPortnumber = 8080;
 		
-        // MOVIE PATH
+        // MOVIE/TVSHOW PATHs
 		private string movieFolder = string.Empty;
+		private string tvShowFolder = string.Empty;
+
+		// THE RENAMER INFO
+		private string theRenamerFolder = string.Empty;
 
 		public ConfigData()
 		{
@@ -32,6 +36,8 @@ namespace SabMc.Model
 			xbmcPassword = "your_xbmc_password";
 
 			movieFolder = @"C:\data\movie_folder";
+			tvShowFolder = @"C:\data\tvshow_folder";
+			theRenamerFolder = @"C:\Program Files\theRenamer";
 		}
 
 		#region Properties Notifo
@@ -114,7 +120,7 @@ namespace SabMc.Model
 
 		#endregion
 
-		#region Properties Movie Path
+		#region Properties Movie/TvShow Paths
 		
 		/// <summary>
 		/// Folder to move Movie's to when finished
@@ -123,6 +129,25 @@ namespace SabMc.Model
 		{
 			get { return movieFolder; }
 			set { movieFolder = value; }
+		}
+
+		/// <summary>
+		/// Folder to move TV show's to when finished
+		/// </summary>
+		public string TvShowFolder
+		{
+			get { return tvShowFolder; }
+			set { tvShowFolder = value; }
+		}
+
+		#endregion
+
+		#region Properties TheRenamer
+
+		public string TheRenamerFolder
+		{
+			get { return theRenamerFolder; }
+			set { theRenamerFolder = value; }
 		}
 
 		#endregion

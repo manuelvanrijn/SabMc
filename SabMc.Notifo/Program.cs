@@ -3,6 +3,7 @@ namespace SabMc.Notifo
 	using System;
 	using Model;
 	using Services.Config;
+	using Services.Helpers;
 	using Services.Notifo;
 
 	class Program
@@ -11,10 +12,13 @@ namespace SabMc.Notifo
 		{
 			if (ConfigReader.CheckConfig() == false)
 			{
-				Console.WriteLine("INFO: Config file created, please fill it :)");
+				DebugHelper.WriteHeader("Config file generated");
+				DebugHelper.Info("Config file created, please fill it :)");
 				Environment.Exit(1);
 			}
-			Console.WriteLine("== STARTING SABMC.NOTIFO PROCESS ==");
+
+			DebugHelper.WriteArray("Passed arguments", args);
+			DebugHelper.WriteHeader("Starting SabMC.Notifo Process");
 
 			if (args.Length >= 7)
 			{

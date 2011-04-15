@@ -7,6 +7,12 @@ Three SabNzbd processing scripts:
 - SabMC.Movie - Processes downloaded movies
 - SabMC.Notifo - Just sends a notification when the download is finished
 
+##Prerequisite
+
+The SabMC scripts uses the program theRenamer. You need to download, install and configure this to your needs. Below i'll find my configuration.
+
+download: <http://www.therenamer.com>
+
 ##Get Started
 
 - Step 1 - Run build.bat
@@ -15,10 +21,9 @@ Three SabNzbd processing scripts:
 
     INFO: Config file created, please fill it :)
 
-- Step 4 - Edit the just created config.xml and the TvRenamer.exe.config
+- Step 4 - Edit the just created config.xml
 
     /config.xml
-    /Libs/TvRenamer/TvRenamer.exe.config
 
 - Step 5 - Setup SabNZBD to point to the right executable.
 

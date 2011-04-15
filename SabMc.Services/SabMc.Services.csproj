@@ -29,10 +29,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Config\ConfigReader.cs" />
+    <Compile Include="Helpers\DebugHelper.cs" />
     <Compile Include="Helpers\VideoHelper.cs" />
     <Compile Include="Notifo\NotifoApi.cs" />
     <Compile Include="Notifo\NotifoPushNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TheRenamer\TheRenamer.cs" />
     <Compile Include="Xbmc\UpdateLibrary.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,7 @@
 namespace SabMc.Services.Notifo
 {
-	using System;
 	using Config;
+	using Helpers;
 	using Model;
 	using Model.Enums;
 
@@ -32,7 +32,7 @@ namespace SabMc.Services.Notifo
 					if (job.MediaType == MediaType.Other)
 						Send(job, job.FolderName);
 					else
-						Send(job, job.Name);
+						Send(job, job.FolderName);
 					break;
 			}
 		}
@@ -87,7 +87,7 @@ namespace SabMc.Services.Notifo
 			if (_enabled == false)
 				return;
 
-			Console.WriteLine("== Sending Notifo message ==");
+			DebugHelper.WriteHeader("Sending Notifo message");
 			NotifoApi service = new NotifoApi(_username, _secret);
 			
 			string label = "SabMc";
@@ -96,8 +96,8 @@ namespace SabMc.Services.Notifo
 			if (mediaType == MediaType.Movie)
 				label = "SabMc.Movie";
 
-			Console.WriteLine(string.Format("title: {0}", title));
-			Console.WriteLine(string.Format("message: {0}", message));
+			DebugHelper.Log(string.Format("title: {0}", title), true);
+			DebugHelper.Log(string.Format("message: {0}", message), true);
 
 			service.Send(_username, label, title, message);
 		}

@@ -3,6 +3,7 @@ namespace SabMc.Services.Xbmc
 	using System;
 	using System.Net;
 	using Config;
+	using Helpers;
 
 	/// <summary>
 	/// XBMC Helper class for updating the library
@@ -24,13 +25,16 @@ namespace SabMc.Services.Xbmc
 			Setup();
 			// Cancel if not enabled
 			if (_enabled == false)
+			{
+				DebugHelper.Info("Skip XBMC Library update process");
 				return true;
-
-			Console.WriteLine("== Sending XBMC update video library signal ==");
+			}
+			DebugHelper.WriteHeader("Sending XBMC update video library signal");
 
 			try
 			{
 				string url = string.Format("http://{0}:{1}/xbmcCmds/xbmcHttp?command=ExecBuiltIn&parameter=XBMC.updatelibrary(video)", _hostname, _portnumber);
+				DebugHelper.Log(string.Format("XBMC update url: {0}", url), true);
 				CredentialCache credentialCache = new CredentialCache();
 				credentialCache.Add(new Uri(url), "BASIC", new NetworkCredential(_username, _password));
 
@@ -40,8 +44,9 @@ namespace SabMc.Services.Xbmc
 
 				return true;
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				DebugHelper.Error(e.ToString());
 				return false;
 			}
 
@@ -52,6 +57,7 @@ namespace SabMc.Services.Xbmc
 		/// </summary>
 		private static void Setup()
 		{
+
 			_username = ConfigReader.Config.XbmcUsername;
 			_password = ConfigReader.Config.XbmcPassword;
 			_hostname = ConfigReader.Config.XbmcHostname;
