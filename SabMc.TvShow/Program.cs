@@ -42,7 +42,7 @@ namespace SabMc.TvShow
 					{
 						DebugHelper.Log("Job status = OK after processing");
 						UpdateLibrary.UpdateVideoLibrary();
-						//job.CleanUp();
+						job.CleanUp();
 					}
 				}
 				NotifoPushNotification.Send(job, cleanMovieName);
